@@ -1,0 +1,2 @@
+# coins-app
+Test task
