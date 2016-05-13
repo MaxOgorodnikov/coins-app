@@ -12,10 +12,14 @@
 			try {
 				$amount = $this->getPencesAmount($this->getPostVar('userInput'));
 				$result = $this->getCoins($amount);
-				
-				echo json_encode(array(
-					'result' => htmlentities($this->getPostVar('userInput')) . ' = ' . utf8_encode($result)
-				));
+
+				if ($this->getPostVar('js_disabled')) {
+					header('Location: http://' . $_SERVER['HTTP_HOST'] . '?userInput=' . $this->getPostVar('userInput') . '&result=' . urlencode($result));
+				} else {
+                    echo json_encode(array(
+                        'result' => htmlentities($this->getPostVar('userInput')) . ' = ' . utf8_encode($result)
+                    ));
+                }
 			} catch (Exception $e) {
 				$this->jsonError($e->getMessage(), $e->getCode());
 			}
@@ -26,7 +30,7 @@
 			if (isset($this->post[$key])) {
 				return $this->post[$key];
 			} else {
-				throw new Exception('Amount not set');
+				throw new Exception($key . ' variable is not set');
 			}
 		}
 		
